@@ -11,7 +11,7 @@ body {
     max-width: 70%;
     min-width: fit-content;
 
-    font-size: 17px;
+    font-size: 20px;
     word-wrap: break-word;
     overflow-wrap: break-word;
     overflow-x: hidden;
@@ -117,7 +117,7 @@ mjx-container {
 @media (max-width: 600px) {
     body {
         padding: 15px;
-        font-size: 16px;
+        font-size: 18px;
     }
 
     h1 {
