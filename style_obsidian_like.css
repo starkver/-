@@ -1,10 +1,42 @@
+/* Базовая стилизация */
 body {
     background-color: #1e1e1e;
     color: #dcdcdc;
     font-family: 'Segoe UI', sans-serif;
     line-height: 1.6;
     padding: 20px;
+    margin: 0;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 17px;
+    word-wrap: break-word;
 }
+
+/* Заголовки */
+h1, h2, h3 {
+    margin-top: 1.5em;
+    font-weight: bold;
+}
+h1 { color: #ff7ca8; font-size: 1.8em; }
+h2 { color: #9dff70; font-size: 1.5em; }
+h3 { color: #ffd666; font-size: 1.2em; }
+
+/* Ссылки */
+a {
+    color: #72b5f3;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+/* Списки */
+ul, ol {
+    padding-left: 20px;
+}
+
+/* Файлы */
 #file-list {
     list-style: none;
     padding-left: 0;
@@ -18,20 +50,8 @@ body {
 #file-list li:hover {
     text-decoration: underline;
 }
-a {
-    color: #72b5f3;
-    text-decoration: none;
-}
-a:hover {
-    text-decoration: underline;
-}
-h1, h2, h3 {
-    margin-top: 1.5em;
-    font-weight: bold;
-}
-h1 { color: #ff7ca8; }
-h2 { color: #9dff70; }
-h3 { color: #ffd666; }
+
+/* Текстовые элементы */
 em {
     font-style: italic;
     color: #72b5f3;
@@ -40,6 +60,8 @@ strong {
     font-weight: bold;
     color: #ffffff;
 }
+
+/* Код */
 code {
     background-color: #2d2d2d;
     padding: 2px 4px;
@@ -52,15 +74,20 @@ pre {
     border-radius: 5px;
     overflow-x: auto;
 }
+
+/* Цитаты */
 blockquote {
     border-left: 4px solid #888;
     padding-left: 10px;
     color: #aaa;
     margin-left: 0;
 }
+
+/* Таблицы */
 table {
     border-collapse: collapse;
     width: 100%;
+    overflow-x: auto;
 }
 td, th {
     border: 1px solid #444;
@@ -70,6 +97,27 @@ td, th {
 th {
     background-color: #333;
 }
-ul, ol {
-    padding-left: 20px;
+
+/* Адаптивность */
+@media (max-width: 600px) {
+    body {
+        padding: 15px;
+        font-size: 16px;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    h2 {
+        font-size: 1.3em;
+    }
+
+    h3 {
+        font-size: 1.1em;
+    }
+
+    table, pre {
+        font-size: 14px;
+    }
 }
