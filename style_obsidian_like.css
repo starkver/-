@@ -5,16 +5,12 @@ body {
     font-family: 'Segoe UI', sans-serif;
     line-height: 1.6;
     padding: 20px;
-    margin: 0 auto;
-
-    /* Настройка ширины: контент адаптируется к самой широкой таблице */
-    max-width: 70%;
-    min-width: fit-content;
-
-    font-size: 20px;
+    margin: 0;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 17px;
     word-wrap: break-word;
-    overflow-wrap: break-word;
-    overflow-x: hidden;
 }
 
 /* Заголовки */
@@ -71,14 +67,11 @@ code {
     padding: 2px 4px;
     border-radius: 4px;
     font-family: monospace;
-    word-break: break-word;
 }
 pre {
     background-color: #2d2d2d;
     padding: 10px;
     border-radius: 5px;
-    white-space: pre-wrap;
-    word-wrap: break-word;
     overflow-x: auto;
 }
 
@@ -94,8 +87,7 @@ blockquote {
 table {
     border-collapse: collapse;
     width: 100%;
-    word-break: break-word;
-    table-layout: auto;
+    overflow-x: auto;
 }
 td, th {
     border: 1px solid #444;
@@ -106,18 +98,11 @@ th {
     background-color: #333;
 }
 
-/* MathJax/KaTeX адаптация */
-mjx-container {
-    overflow-x: auto;
-    max-width: 100%;
-    display: block;
-}
-
 /* Адаптивность */
-@media (max-width: 500px) {
+@media (max-width: 600px) {
     body {
         padding: 15px;
-        font-size: 18px;
+        font-size: 16px;
     }
 
     h1 {
