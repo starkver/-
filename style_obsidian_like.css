@@ -1,16 +1,21 @@
-/* Базовая стилизация */
 body {
     background-color: #1e1e1e;
     color: #dcdcdc;
     font-family: 'Segoe UI', sans-serif;
     line-height: 1.6;
-    padding: 20px;
     margin: 0;
-    max-width: 900px;
-    margin-left: auto;
-    margin-right: auto;
+    padding: 20px;
     font-size: 17px;
+    max-width: 100%;
     word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Центрирование основного контента */
+main, .content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 15px;
 }
 
 /* Заголовки */
@@ -67,12 +72,14 @@ code {
     padding: 2px 4px;
     border-radius: 4px;
     font-family: monospace;
+    word-break: break-word;
 }
 pre {
     background-color: #2d2d2d;
     padding: 10px;
     border-radius: 5px;
-    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
 }
 
 /* Цитаты */
@@ -87,22 +94,24 @@ blockquote {
 table {
     border-collapse: collapse;
     width: 100%;
-    overflow-x: auto;
+    table-layout: fixed;
+    word-break: break-word;
 }
 td, th {
     border: 1px solid #444;
     padding: 8px;
     text-align: left;
+    vertical-align: top;
 }
 th {
     background-color: #333;
 }
 
 /* Адаптивность */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
     body {
-        padding: 15px;
         font-size: 16px;
+        padding: 10px;
     }
 
     h1 {
@@ -117,7 +126,7 @@ th {
         font-size: 1.1em;
     }
 
-    table, pre {
+    table, pre, code {
         font-size: 14px;
     }
 }
