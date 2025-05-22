@@ -1,21 +1,20 @@
+/* Базовая стилизация */
 body {
     background-color: #1e1e1e;
     color: #dcdcdc;
     font-family: 'Segoe UI', sans-serif;
     line-height: 1.6;
-    margin: 0;
     padding: 20px;
-    font-size: 17px;
+    margin: 0 auto;
+
+    /* Настройка ширины: контент адаптируется к самой широкой таблице */
     max-width: 100%;
+    min-width: fit-content;
+
+    font-size: 17px;
     word-wrap: break-word;
     overflow-wrap: break-word;
-}
-
-/* Центрирование основного контента */
-main, .content {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 15px;
+    overflow-x: hidden;
 }
 
 /* Заголовки */
@@ -79,7 +78,8 @@ pre {
     padding: 10px;
     border-radius: 5px;
     white-space: pre-wrap;
-    word-break: break-word;
+    word-wrap: break-word;
+    overflow-x: auto;
 }
 
 /* Цитаты */
@@ -94,24 +94,30 @@ blockquote {
 table {
     border-collapse: collapse;
     width: 100%;
-    table-layout: fixed;
     word-break: break-word;
+    table-layout: auto;
 }
 td, th {
     border: 1px solid #444;
     padding: 8px;
     text-align: left;
-    vertical-align: top;
 }
 th {
     background-color: #333;
 }
 
+/* MathJax/KaTeX адаптация */
+mjx-container {
+    overflow-x: auto;
+    max-width: 100%;
+    display: block;
+}
+
 /* Адаптивность */
-@media (max-width: 768px) {
+@media (max-width: 600px) {
     body {
+        padding: 15px;
         font-size: 16px;
-        padding: 10px;
     }
 
     h1 {
@@ -126,7 +132,7 @@ th {
         font-size: 1.1em;
     }
 
-    table, pre, code {
+    table, pre {
         font-size: 14px;
     }
 }
