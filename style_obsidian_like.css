@@ -5,11 +5,12 @@ body {
     font-family: 'Segoe UI', sans-serif;
     line-height: 1.6;
     padding: 20px;
-    margin: 0 auto;
+    margin: 0;
     max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
     font-size: 17px;
     word-wrap: break-word;
-    overflow-wrap: break-word;
 }
 
 /* Заголовки */
@@ -66,14 +67,11 @@ code {
     padding: 2px 4px;
     border-radius: 4px;
     font-family: monospace;
-    word-break: break-word;
 }
 pre {
     background-color: #2d2d2d;
     padding: 10px;
     border-radius: 5px;
-    white-space: pre-wrap;
-    word-wrap: break-word;
     overflow-x: auto;
 }
 
@@ -90,7 +88,6 @@ table {
     border-collapse: collapse;
     width: 100%;
     overflow-x: auto;
-    display: block;
 }
 td, th {
     border: 1px solid #444;
@@ -99,13 +96,6 @@ td, th {
 }
 th {
     background-color: #333;
-}
-
-/* MathJax/KaTeX адаптация */
-mjx-container {
-    overflow-x: auto;
-    max-width: 100%;
-    display: block;
 }
 
 /* Адаптивность */
