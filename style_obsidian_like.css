@@ -4,13 +4,52 @@ body {
     color: #dcdcdc;
     font-family: 'Segoe UI', sans-serif;
     line-height: 1.6;
-    padding: 20px;
+    padding: 0;
     margin: 0;
-    max-width: 900px;
-    margin-left: auto;
-    margin-right: auto;
     font-size: 17px;
     word-wrap: break-word;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Гамбургер */
+.hamburger-container {
+    background-color: #1e1e1e;
+    padding: 10px;
+}
+.hamburger {
+    font-size: 24px;
+    background: none;
+    color: #72b5f3;
+    border: none;
+    cursor: pointer;
+}
+
+/* Боковое меню */
+.sidebar {
+    position: fixed;
+    top: 50px;
+    left: -250px;
+    width: 250px;
+    height: calc(100% - 50px);
+    background-color: #2d2d2d;
+    padding: 20px;
+    overflow-y: auto;
+    transition: left 0.3s ease;
+    z-index: 1000;
+}
+.sidebar.open {
+    left: 0;
+}
+
+/* Контент */
+.content-area {
+    padding: 20px;
+    margin-left: 0;
+    transition: margin-left 0.3s ease;
+    flex-grow: 1;
 }
 
 /* Заголовки */
@@ -101,7 +140,7 @@ th {
 /* Адаптивность */
 @media (max-width: 600px) {
     body {
-        padding: 15px;
+        padding: 0;
         font-size: 16px;
     }
 
