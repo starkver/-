@@ -4,21 +4,24 @@ async function loadFileList() {
   const res = await fetch("notes/index.json");
   const files = await res.json();
   currentFiles = files;
+
   const list = document.getElementById("file-list");
   list.innerHTML = "";
-
-  if (window.MathJax) MathJax.typesetPromise();
 
   files.forEach(file => {
     const li = document.createElement("li");
     li.textContent = file.replace(".md", "");
+    li.style.cursor = "pointer";
     li.onclick = () => loadNote(file);
     list.appendChild(li);
   });
 }
 
 function toAnchor(text) {
-  return text.toLowerCase().replace(/[^a-zа-я0-9]+/gi, "-").replace(/^-+|-+$/g, "");
+  return text
+    .toLowerCase()
+    .replace(/[^a-zа-я0-9]+/gi, "-")
+    .replace(/^-+|-+$/g, "");
 }
 
 function generateAnchorsAndLinks(html, currentFile) {
@@ -28,8 +31,8 @@ function generateAnchorsAndLinks(html, currentFile) {
   });
 
   html = html.replace(/\[\[#([^\]]+)\]\]/g, (match, linkText) => {
-    let anchorPart = toAnchor(linkText);
-    return <a href="#${anchorPart}" onclick="loadNote('${currentFile}', '${anchorPart}')">[[#${linkText}]]</a>;
+    const anchor = toAnchor(linkText);
+    return <a href="#${anchor}" onclick="loadNote('${currentFile}', '${anchor}')">[[#${linkText}]]</a>;
   });
 
   return html;
