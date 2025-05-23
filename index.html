@@ -11,15 +11,16 @@
     src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
-  <div style="display: flex;">
-    <div style="width: 20%; padding-right: 20px;">
+  <div class="hamburger-container">
+    <button class="hamburger" onclick="toggleMenu()">☰</button>
+    <nav id="sidebar" class="sidebar">
       <h2>Экз</h2>
       <ul id="file-list"></ul>
-    </div>
-    <div style="width: 80%;">
-      <div id="note-content"> </div>
-    </div>
+    </nav>
   </div>
+
+  <div id="note-content" class="content-area"></div>
+
   <script src="script.js"></script>
 </body>
 </html>
