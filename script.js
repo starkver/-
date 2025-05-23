@@ -13,7 +13,7 @@ async function loadFileList() {
     li.textContent = file.replace(".md", "");
     li.onclick = () => {
       loadNote(file);
-      toggleSidebar(false); // Закрыть бургер-меню при клике
+      toggleSidebar(false);
     };
     list.appendChild(li);
   });
@@ -32,8 +32,8 @@ function generateAnchorsAndLinks(html, currentFile) {
   });
 
   html = html.replace(/\[\[#([^\]]+)\]\]/g, (match, linkText) => {
-    const anchor = toAnchor(linkText);
-    return <a href="#${anchor}" onclick="loadNote('${currentFile}', '${anchor}')">[[#${linkText}]]</a>;
+    const anchorPart = toAnchor(linkText);
+    return <a href="#${anchorPart}" onclick="loadNote('${currentFile}', '${anchorPart}')">[[#${linkText}]]</a>;
   });
 
   return html;
@@ -64,6 +64,7 @@ function toggleSidebar(force = null) {
   const sidebar = document.querySelector(".mobile-sidebar");
   const overlay = document.querySelector(".overlay");
   const isOpen = sidebar.classList.contains("open");
+
   const shouldOpen = force === null ? !isOpen : force;
 
   if (shouldOpen) {
