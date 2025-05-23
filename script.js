@@ -4,35 +4,32 @@ async function loadFileList() {
   const res = await fetch("notes/index.json");
   const files = await res.json();
   currentFiles = files;
-
   const list = document.getElementById("file-list");
   list.innerHTML = "";
 
   files.forEach(file => {
     const li = document.createElement("li");
     li.textContent = file.replace(".md", "");
-    li.style.cursor = "pointer";
     li.onclick = () => loadNote(file);
     list.appendChild(li);
   });
+
+  if (window.MathJax) MathJax.typesetPromise();
 }
 
 function toAnchor(text) {
-  return text
-    .toLowerCase()
-    .replace(/[^a-zа-я0-9]+/gi, "-")
-    .replace(/^-+|-+$/g, "");
+  return text.toLowerCase().replace(/[^a-zа-я0-9]+/gi, "-").replace(/^-+|-+$/g, "");
 }
 
 function generateAnchorsAndLinks(html, currentFile) {
   html = html.replace(/<h(\d)>(.*?)<\/h\d>/g, (match, tag, text) => {
     const anchor = toAnchor(text);
-    return '<h${tag} id="${anchor}">${text}</h${tag}>';
+    return <h${tag} id="${anchor}">${text}</h${tag}>;
   });
 
   html = html.replace(/\[\[#([^\]]+)\]\]/g, (match, linkText) => {
-    const anchor = toAnchor(linkText);
-    return '<a href="#${anchor}" onclick="loadNote('${currentFile}', '${anchor}')">[[#${linkText}]]</a>';
+    const anchorPart = toAnchor(linkText);
+    return <a href="#${anchorPart}" onclick="loadNote('${currentFile}', '${anchorPart}')">[[#${linkText}]]</a>;
   });
 
   return html;
