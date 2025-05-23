@@ -11,13 +11,38 @@
     src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
+
   <div class="hamburger-container">
-    <button class="hamburger" onclick="toggleMenu()">☰</button>
-    <nav id="sidebar" class="sidebar">
-      <h2>Экз</h2>
-      <ul id="file-list"></ul>
-    </nav>
+    <button class="hamburger">&#9776;</button>
   </div>
+
+  <div class="sidebar">
+    <h2>Экз</h2>
+    <ul id="file-list"></ul>
+  </div>
+
+  <div class="content-area">
+    <div id="note-content"></div>
+  </div>
+
+  <script src="script.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const hamburger = document.querySelector(".hamburger");
+      const sidebar = document.querySelector(".sidebar");
+
+      hamburger.addEventListener("click", () => {
+        sidebar.classList.toggle("open");
+      });
+
+      document.getElementById("file-list").addEventListener("click", () => {
+        sidebar.classList.remove("open");
+      });
+    });
+  </script>
+</body>
+</html>
 
   <div id="note-content" class="content-area"></div>
 
