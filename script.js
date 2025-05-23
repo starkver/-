@@ -4,13 +4,17 @@ async function loadFileList() {
   const res = await fetch("notes/index.json");
   const files = await res.json();
   currentFiles = files;
+
   const list = document.getElementById("file-list");
   list.innerHTML = "";
 
   files.forEach(file => {
     const li = document.createElement("li");
     li.textContent = file.replace(".md", "");
-    li.onclick = () => loadNote(file);
+    li.onclick = () => {
+      loadNote(file);
+      toggleSidebar(false);
+    };
     list.appendChild(li);
   });
 
@@ -40,6 +44,7 @@ async function loadNote(filename, anchor = "") {
   const text = await res.text();
   const html = marked.parse(text);
   const processed = generateAnchorsAndLinks(html, filename);
+
   const container = document.getElementById("note-content");
   container.innerHTML = processed;
 
@@ -55,4 +60,30 @@ async function loadNote(filename, anchor = "") {
   }
 }
 
-window.onload = loadFileList;
+function toggleSidebar(force = null) {
+  const sidebar = document.querySelector(".mobile-sidebar");
+  const overlay = document.querySelector(".overlay");
+  const isOpen = sidebar.classList.contains("open");
+
+  const shouldOpen = force === null ? !isOpen : force;
+
+  if (shouldOpen) {
+    sidebar.classList.add("open");
+    overlay.classList.add("active");
+  } else {
+    sidebar.classList.remove("open");
+    overlay.classList.remove("active");
+  }
+}
+
+window.onload = () => {
+  loadFileList();
+
+  document.querySelector(".menu-toggle").addEventListener("click", () => {
+    toggleSidebar();
+  });
+
+  document.querySelector(".overlay").addEventListener("click", () => {
+    toggleSidebar(false);
+  });
+};
