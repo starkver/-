@@ -27,12 +27,12 @@ function toAnchor(text) {
 function generateAnchorsAndLinks(html, currentFile) {
   html = html.replace(/<h(\d)>(.*?)<\/h\d>/g, (match, tag, text) => {
     const anchor = toAnchor(text);
-    return <h${tag} id="${anchor}">${text}</h${tag}>;
+    return '<h${tag} id="${anchor}">${text}</h${tag}>';
   });
 
   html = html.replace(/\[\[#([^\]]+)\]\]/g, (match, linkText) => {
     const anchor = toAnchor(linkText);
-    return <a href="#${anchor}" onclick="loadNote('${currentFile}', '${anchor}')">[[#${linkText}]]</a>;
+    return '<a href="#${anchor}" onclick="loadNote('${currentFile}', '${anchor}')">[[#${linkText}]]</a>';
   });
 
   return html;
