@@ -2,59 +2,25 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Мой помощник в подготовке</title>
-  <link rel="stylesheet" href="style_obsidian_like.css">
-
-  <!-- Markdown парсер -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Заметки</title>
+  <link rel="stylesheet" href="style_obsidian_like.css"/>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
-  <!-- MathJax для формул -->
-  <script id="MathJax-script" async
-    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
+  <div class="menu-toggle">☰ Меню</div>
+  <div class="overlay"></div>
 
-  <header class="app-header">
-    <button class="menu-toggle">&#9776;</button>
-    <span class="app-title">Помощник</span>
-  </header>
+  <div class="mobile-sidebar">
+    <ul id="file-list"></ul>
+  </div>
 
-  <nav class="mobile-sidebar" id="mobile-sidebar">
-    <ul>
-      <li><a href="#">Заглавная</a></li>
-      <li><a href="#">химия экзамен</a></li>
-      <li><a href="#">in development</a></li>
-      <li><a href="#">in development</a></li>
-      <li><a href="#">in development</a></li>
-    </ul>
-    <hr>
-    <p class="donate-section">
-      <strong>in development</strong><br>
-      in development
-    </p>
-  </nav>
-
-  <div class="overlay" id="overlay"></div>
-
-  <div class="content-area" id="note-content"></div>
+  <div id="note-content">
+    <p style="text-align: center;">Выберите заметку слева</p>
+  </div>
 
   <script src="script.js"></script>
-  <script>
-    const toggleBtn = document.querySelector(".menu-toggle");
-    const sidebar = document.getElementById("mobile-sidebar");
-    const overlay = document.getElementById("overlay");
-
-    toggleBtn.addEventListener("click", () => {
-      sidebar.classList.toggle("open");
-      overlay.classList.toggle("active");
-    });
-
-    overlay.addEventListener("click", () => {
-      sidebar.classList.remove("open");
-      overlay.classList.remove("active");
-    });
-  </script>
-
 </body>
 </html>
