@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Мой помощник в подготовке</title>
   <link rel="stylesheet" href="style_obsidian_like.css">
+  
+  <!-- Markdown парсер -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  
+  <!-- MathJax для формул -->
   <script id="MathJax-script" async
     src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
@@ -21,10 +24,9 @@
     <ul id="file-list"></ul>
   </div>
 
-  <div class="content-area">
-    <div id="note-content"></div>
-  </div>
+  <div class="content-area" id="note-content"></div>
 
+  <!-- Основной скрипт -->
   <script src="script.js"></script>
 
   <script>
@@ -41,11 +43,6 @@
       });
     });
   </script>
-</body>
-</html>
 
-  <div id="note-content" class="content-area"></div>
-
-  <script src="script.js"></script>
 </body>
 </html>
