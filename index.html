@@ -5,42 +5,54 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Мой помощник в подготовке</title>
   <link rel="stylesheet" href="style_obsidian_like.css">
-  
+
   <!-- Markdown парсер -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  
+
   <!-- MathJax для формул -->
   <script id="MathJax-script" async
     src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
 
-  <div class="hamburger-container">
-    <button class="hamburger">&#9776;</button>
-  </div>
+  <header class="app-header">
+    <button class="menu-toggle">&#9776;</button>
+    <span class="app-title">ВикиПомощник</span>
+  </header>
 
-  <div class="sidebar">
-    <h2>Экз</h2>
-    <ul id="file-list"></ul>
-  </div>
+  <nav class="mobile-sidebar" id="mobile-sidebar">
+    <ul>
+      <li><a href="#">Заглавная</a></li>
+      <li><a href="#">Случайная</a></li>
+      <li><a href="#">Поблизости</a></li>
+      <li><a href="#">Войти</a></li>
+      <li><a href="#">Настройки</a></li>
+    </ul>
+    <hr>
+    <p class="donate-section">
+      <strong>Donate Now</strong><br>
+      If this site is useful to you, please consider supporting it.
+    </p>
+  </nav>
+
+  <div class="overlay" id="overlay"></div>
 
   <div class="content-area" id="note-content"></div>
 
-  <!-- Основной скрипт -->
   <script src="script.js"></script>
-
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const hamburger = document.querySelector(".hamburger");
-      const sidebar = document.querySelector(".sidebar");
+    const toggleBtn = document.querySelector(".menu-toggle");
+    const sidebar = document.getElementById("mobile-sidebar");
+    const overlay = document.getElementById("overlay");
 
-      hamburger.addEventListener("click", () => {
-        sidebar.classList.toggle("open");
-      });
+    toggleBtn.addEventListener("click", () => {
+      sidebar.classList.toggle("open");
+      overlay.classList.toggle("active");
+    });
 
-      document.getElementById("file-list").addEventListener("click", () => {
-        sidebar.classList.remove("open");
-      });
+    overlay.addEventListener("click", () => {
+      sidebar.classList.remove("open");
+      overlay.classList.remove("active");
     });
   </script>
 
