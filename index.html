@@ -22,11 +22,11 @@
 
   <nav class="mobile-sidebar" id="mobile-sidebar">
     <ul>
-      <li><a href="#">Заглавная</a></li>
-      <li><a href="#">химия экзамен</a></li>
-      <li><a href="#">in development</a></li>
-      <li><a href="#">in development</a></li>
-      <li><a href="#">in development</a></li>
+      <li><a href="#" onclick="loadNote('home.md')">Заглавная</a></li>
+      <li><a href="#" onclick="loadNote('exam_chemistry.md')">химия экзамен</a></li>
+      <li><a href="#" onclick="alert('В разработке')">in development</a></li>
+      <li><a href="#" onclick="alert('В разработке')">in development</a></li>
+      <li><a href="#" onclick="alert('В разработке')">in development</a></li>
     </ul>
     <hr>
     <p class="donate-section">
@@ -37,7 +37,9 @@
 
   <div class="overlay" id="overlay"></div>
 
-  <div class="content-area" id="note-content"></div>
+  <div class="content-area" id="note-content">
+    <p style="text-align: center;">Выберите заметку слева</p>
+  </div>
 
   <script src="script.js"></script>
   <script>
