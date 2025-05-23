@@ -6,13 +6,16 @@ async function loadFileList() {
     currentFiles = files;
     const list = document.getElementById("file-list");
     list.innerHTML = "";
-if (window.MathJax) MathJax.typesetPromise();
     files.forEach(file => {
         const li = document.createElement("li");
         li.textContent = file.replace(".md", "");
-        li.onclick = () => loadNote(file);
+        li.onclick = () => {
+            loadNote(file);
+            closeMenu();
+        };
         list.appendChild(li);
     });
+    if (window.MathJax) MathJax.typesetPromise();
 }
 
 function toAnchor(text) {
@@ -20,17 +23,14 @@ function toAnchor(text) {
 }
 
 function generateAnchorsAndLinks(html, currentFile) {
-    const filenames = currentFiles;
-
     html = html.replace(/<h(\d)>(.*?)<\/h\d>/g, (match, tag, text) => {
         const anchor = toAnchor(text);
-        return `<h${tag} id="${anchor}">${text}</h${tag}>`;
+        return <h${tag} id="${anchor}">${text}</h${tag}>;
     });
 
     html = html.replace(/\[\[#([^\]]+)\]\]/g, (match, linkText) => {
-        let filename = currentFile;
         let anchorPart = toAnchor(linkText);
-        return `<a href="#${anchorPart}" onclick="loadNote('${filename}', '${anchorPart}')">[[#${linkText}]]</a>`;
+        return <a href="#${anchorPart}" onclick="loadNote('${currentFile}', '${anchorPart}')">[[#${linkText}]]</a>;
     });
 
     return html;
@@ -43,7 +43,7 @@ async function loadNote(filename, anchor = "") {
     const processed = generateAnchorsAndLinks(html, filename);
     const container = document.getElementById("note-content");
     container.innerHTML = processed;
-if (window.MathJax) MathJax.typesetPromise();
+    if (window.MathJax) MathJax.typesetPromise();
     if (anchor) {
         setTimeout(() => {
             const target = document.getElementById(anchor);
@@ -52,6 +52,15 @@ if (window.MathJax) MathJax.typesetPromise();
             }
         }, 100);
     }
+}
+
+function toggleMenu() {
+    const sidebar = document.getElementById("sidebar");
+    sidebar.classList.toggle("open");
+}
+
+function closeMenu() {
+    document.getElementById("sidebar").classList.remove("open");
 }
 
 window.onload = loadFileList;
