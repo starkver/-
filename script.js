@@ -1,7 +1,7 @@
 let currentFiles = [];
 
 async function loadFileList() {
-  const res = await fetch("notes/index.json");
+  const res = await fetch("notes/" + encodeURIComponent(filename));
   const files = await res.json();
   currentFiles = files;
 
