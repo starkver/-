@@ -78,7 +78,7 @@ function toggleSidebar(force = null) {
 }
 
 window.onload = () => {
-  loadNote("Химия_экзамен.md");
+  loadFileList("Химия_экзамен.md");
 
   document.querySelector(".menu-toggle").addEventListener("click", () => {
     toggleSidebar();
