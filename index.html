@@ -5,13 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Мой помощник в подготовке</title>
   <link rel="stylesheet" href="style_obsidian_like.css">
-
-  <!-- Markdown парсер -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
-  <!-- MathJax для формул -->
-  <script id="MathJax-script" async
-    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
 
@@ -23,7 +18,7 @@
   <nav class="mobile-sidebar" id="mobile-sidebar">
     <ul>
       <li><a href="#">Заглавная</a></li>
-      <li><a href="#">химия экзамен</a></li>
+      <li><a href="#" onclick="loadNote('Химия_экзамен.md'); toggleSidebar(false); return false;">химия экзамен</a></li>
       <li><a href="#">in development</a></li>
       <li><a href="#">in development</a></li>
       <li><a href="#">in development</a></li>
@@ -36,7 +31,6 @@
   </nav>
 
   <div class="overlay" id="overlay"></div>
-
   <div class="content-area" id="note-content"></div>
 
   <script src="script.js"></script>
@@ -55,6 +49,5 @@
       overlay.classList.remove("active");
     });
   </script>
-
 </body>
 </html>
