@@ -1,0 +1,2 @@
+RewriteEngine On
+RewriteRule ^notes/химия-экзамен$ /notes/Химия_экзамен.md [L]
