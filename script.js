@@ -1,214 +1,126 @@
-некоторые изменения в стилях 
-/* Основное оформление */
-body {
-  background-color: #1e1e1e;
-  color: #dcdcdc;
-  font-family: 'Segoe UI', sans-serif;
-  line-height: 1.6;
-  margin: 0;
-  font-size: 17px;
-  height: 100vh;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-}
 
-/* Шапка */
-.app-header {
-  background-color: #2d2d2d;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  padding: 10px 15px;
-  height: 50px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-  z-index: 1001;
-}
+/* ===== НАСТРОЙКА ===== */
+const NOTES_DIR   = 'notes/';          // папка с *.md и index.json
+const JSON_INDEX  = 'index.json';      // список файлов
+const CONTENT_ID  = 'note-content';
+const SIDEBAR_ID  = 'mobile-sidebar';
+const FILE_LIST_ID = 'file-list';
 
-.menu-toggle {
-  font-size: 24px;
-  background: none;
-  color: #72b5f3;
-  border: none;
-  cursor: pointer;
-  margin-right: 15px;
-}
+/* =========== ИНИЦИАЛИЗАЦИЯ =========== */
+window.addEventListener('hashchange', handleHash);
+document.addEventListener('DOMContentLoaded', async () => {
+  // 1. СРАЗУ вешаем обработчики меню, чтобы гамбургер жил даже при ошибках
+  bindSidebar();
 
-.app-title {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-/* Выдвижное меню */
-.mobile-sidebar {
-  position: fixed;
-  top: 0;
-  left: -260px;
-  width: 260px;
-  height: 100%;
-  background: #2d2d2d;
-  padding: 20px 25px 20px 25px;
-  overflow-y: auto;
-  transition: left 0.3s ease;
-  z-index: 1000;
-  box-sizing: border-box;
-}
-
-/* затемнение экрана при открытом меню */
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.6);
-  opacity:0;
-  pointer-events:none;
-  transition: opacity .3s ease;
-  z-index:900;
-}
-.overlay.active { opacity:1; pointer-events:auto; }
-
-.mobile-sidebar.open {
-  left: 0;
-}
-
-.mobile-sidebar ul {
-  list-style: none;
-  padding: 0;
-}
-
-.mobile-sidebar li {
-  margin-bottom: 12px;
-}
-
-.mobile-sidebar a {
-  color: #72b5f3;
-  text-decoration: none;
-  font-size: 16px;
-}
-
-.mobile-sidebar a:hover {
-  text-decoration: underline;
-}
-
-.donate-section {
-  margin-top: 20px;
-  font-size: 14px;
-  color: #ccc;
-}
-
-/* Затенение при открытом меню */
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.6);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-  z-index: 900;
-}
-
-.overlay.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* Контент */
-.content-area {
-  flex: 1;
-  padding: 20px;
-  overflow-y: auto;
-  margin-top: 50px;
-}
-
-/* Заголовки */
-h1, h2, h3 {
-  margin-top: 1.5em;
-  font-weight: bold;
-}
-h1 { color: #ff7ca8; font-size: 1.8em; }
-h2 { color: #9dff70; font-size: 1.5em; }
-h3 { color: #ffd666; font-size: 1.2em; }
-
-/* Ссылки */
-a {
-  color: #72b5f3;
-  text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
-}
-
-/* Списки */
-ul, ol {
-  padding-left: 20px;
-}
-
-/* Код */
-code {
-  background-color: #2d2d2d;
-  padding: 2px 4px;
-  border-radius: 4px;
-  font-family: monospace;
-}
-pre {
-  background-color: #2d2d2d;
-  padding: 10px;
-  border-radius: 5px;
-  overflow-x: auto;
-}
-
-/* Цитаты */
-blockquote {
-  border-left: 4px solid #888;
-  padding-left: 10px;
-  color: #aaa;
-  margin-left: 0;
-}
-
-/* Таблицы */
-table {
-  border-collapse: collapse;
-  width: 100%;
-  overflow-x: auto;
-}
-td, th {
-  border: 1px solid #444;
-  padding: 8px;
-  text-align: left;
-}
-th {
-  background-color: #333;
-}
-
-/* Markdown файл-лист */
-#file-list {
-  list-style: none;
-  padding-left: 0;
-  margin: 0;
-}
-#file-list li {
-  cursor: pointer;
-  color: #72b5f3;
-  padding: 5px 0;
-}
-#file-list li:hover {
-  text-decoration: underline;
-}
-
-/* Адаптивность */
-max-width: 600px {
-  .content-area {
-    padding: 15px;
-    font-size: 16px;
+  // 2. Пробуем подтянуть список файлов — если не выйдет, просто покажем оболочку
+  try {
+    await loadFileList();
+  } catch (err) {
+    console.error('loadFileList() сломался:', err);
   }
 
-  h1 { font-size: 1.5em; }
-  h2 { font-size: 1.3em; }
-  h3 { font-size: 1.1em; }
+  // 3. Открываем ссылку из адресной строки (если есть)
+  handleHash();
+});
 
-  table, pre {
-    font-size: 14px;
+/* ========= РОУТЕР (#hash) ========= */
+function handleHash() {
+  const raw = decodeURIComponent(location.hash.slice(1));
+  if (!raw) return; // "Заглавная"
+
+  const [file, anchor] = raw.split(':');
+  if (!file.endsWith('.md')) return;
+
+  loadNote(file, anchor);
+  toggleSidebar(false); // закрываем меню после перехода
+}
+
+/* ======== ЗАГРУЗКА MD ======== */
+async function loadNote(file, anchor = '') {
+  try {
+    const res = await fetch(`${NOTES_DIR}${file}`);
+    if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+
+    const md   = await res.text();
+    const html = injectAnchors(marked.parse(md), file);
+
+    const box = document.getElementById(CONTENT_ID);
+    box.innerHTML = html;
+
+    if (window.MathJax) await MathJax.typesetPromise();
+    if (anchor) document.getElementById(anchor)?.scrollIntoView({ behavior: 'smooth' });
+  } catch (err) {
+    console.error('Ошибка загрузки Markdown:', err);
   }
+}
+
+/* ====== СТРОИМ СПИСОК ФАЙЛОВ ====== */
+async function loadFileList() {
+  try {
+    const res = await fetch(`${NOTES_DIR}${JSON_INDEX}`);
+    if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+
+    const files = await res.json(); // массив имён *.md
+    const ul = document.getElementById(FILE_LIST_ID);
+    ul.innerHTML = '';
+
+    files.forEach(name => {
+      const li   = document.createElement('li');
+      const link = document.createElement('a');
+      link.href = `#${encodeURIComponent(name)}`;
+      link.textContent = name.replace(/\.md$/i, '');
+      link.className = 'load-md';
+      link.dataset.file = name;
+      li.appendChild(link);
+      ul.appendChild(li);
+    });
+  } catch (err) {
+    console.error('Не удалось получить список файлов:', err);
+  }
+}
+
+/* ===== ВСПОМОГАТЕЛЬНЫЕ ===== */
+function slug(text) {
+  return text.toLowerCase().trim().replace(/[^a-zа-я0-9]+/gi, '-').replace(/^-+|-+$/g, '');
+}
+
+function injectAnchors(html, currentFile) {
+  html = html.replace(/<h(\d)>([\s\S]*?)<\/h\1>/g, (_, lvl, txt) => {
+    const id = slug(txt);
+    return `<h${lvl} id="${id}">${txt}</h${lvl}>`;
+  });
+
+  html = html.replace(/\[\[#([^\]]+?)\]\]/g, (_, raw) => {
+    const id = slug(raw);
+    const hash = encodeURIComponent(`${currentFile}:${id}`);
+    return `<a href='#${hash}'>[[#${raw}]]</a>`;
+  });
+
+  return html;
+}
+
+/* =========== САЙДБАР =========== */
+function bindSidebar() {
+  const sidebar = document.getElementById(SIDEBAR_ID);
+  const overlay = document.getElementById('overlay');
+  document.querySelector('.menu-toggle').addEventListener('click', () => toggleSidebar());
+  overlay.addEventListener('click', () => toggleSidebar(false));
+
+  // делегируем клики внутри боковой панели
+  sidebar.addEventListener('click', e => {
+    if (e.target.classList.contains('load-md')) {
+      e.preventDefault();
+      const file = e.target.dataset.file;
+      loadNote(file);
+      toggleSidebar(false);
+    }
+  });
+}
+
+function toggleSidebar(force = null) {
+  const sidebar = document.getElementById(SIDEBAR_ID);
+  const overlay = document.getElementById('overlay');
+  const open = force === null ? !sidebar.classList.contains('open') : force;
+  sidebar.classList.toggle('open', open);
+  overlay.classList.toggle('active', open);
 }
