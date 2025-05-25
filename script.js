@@ -1,3 +1,26 @@
+let currentFiles = [];
+
+async function loadFileList() {
+  const res = await fetch("notes/" + encodeURIComponent(filename));
+  const files = await res.json();
+  currentFiles = files;
+
+  const list = document.getElementById("file-list");
+  list.innerHTML = "";
+
+  files.forEach(file => {
+    const li = document.createElement("li");
+    li.textContent = file.replace(".md", "");
+    li.onclick = () => {
+      loadNote(file);
+      toggleSidebar(false);
+    };
+    list.appendChild(li);
+  });
+
+  if (window.MathJax) MathJax.typesetPromise();
+}
+
 function toAnchor(text) {
   return text.toLowerCase().replace(/[^a-zа-я0-9]+/gi, "-").replace(/^-+|-+$/g, "");
 }
@@ -5,44 +28,35 @@ function toAnchor(text) {
 function generateAnchorsAndLinks(html, currentFile) {
   html = html.replace(/<h(\d)>(.*?)<\/h\d>/g, (match, tag, text) => {
     const anchor = toAnchor(text);
-    return `<h${tag} id="${anchor}">${text}</h${tag}>`;
+    return <h${tag} id="${anchor}">${text}</h${tag}>;
   });
 
   html = html.replace(/\[\[#([^\]]+)\]\]/g, (match, linkText) => {
     const anchorPart = toAnchor(linkText);
-    return `<a href="#${anchorPart}" onclick="loadNote('${currentFile}', '${anchorPart}')">[[#${linkText}]]</a>`;
+    return <a href="#${anchorPart}" onclick="loadNote('${currentFile}', '${anchorPart}')">[[#${linkText}]]</a>;
   });
 
   return html;
 }
 
 async function loadNote(filename, anchor = "") {
-  const isExternal = filename.startsWith("http");
+  const res = await fetch("notes/" + filename);
+  const text = await res.text();
+  const html = marked.parse(text);
+  const processed = generateAnchorsAndLinks(html, filename);
 
-  try {
-    const res = await fetch(filename);
-    if (!res.ok) throw new Error("Файл не найден");
+  const container = document.getElementById("note-content");
+  container.innerHTML = processed;
 
-    const text = await res.text();
-    const html = marked.parse(text);
-    const processed = generateAnchorsAndLinks(html, filename);
+  if (window.MathJax) MathJax.typesetPromise();
 
-    const container = document.getElementById("note-content");
-    container.innerHTML = processed;
-
-    if (window.MathJax) MathJax.typesetPromise();
-
-    if (anchor) {
-      setTimeout(() => {
-        const target = document.getElementById(anchor);
-        if (target) {
-          target.scrollIntoView({ behavior: "smooth" });
-        }
-      }, 100);
-    }
-
-  } catch (err) {
-    document.getElementById("note-content").innerHTML = `<p>Ошибка загрузки: ${err.message}</p>`;
+  if (anchor) {
+    setTimeout(() => {
+      const target = document.getElementById(anchor);
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
   }
 }
 
@@ -50,6 +64,7 @@ function toggleSidebar(force = null) {
   const sidebar = document.querySelector(".mobile-sidebar");
   const overlay = document.querySelector(".overlay");
   const isOpen = sidebar.classList.contains("open");
+
   const shouldOpen = force === null ? !isOpen : force;
 
   if (shouldOpen) {
@@ -62,7 +77,7 @@ function toggleSidebar(force = null) {
 }
 
 window.onload = () => {
-  loadNote("Chemistry.md"); // или другой нужный файл
+  loadFileList();
 
   document.querySelector(".menu-toggle").addEventListener("click", () => {
     toggleSidebar();
@@ -71,15 +86,4 @@ window.onload = () => {
   document.querySelector(".overlay").addEventListener("click", () => {
     toggleSidebar(false);
   });
-
-  // Навешиваем обработчики на все ссылки с классом load-md
-  document.querySelectorAll(".load-md").forEach(link => {
-    link.addEventListener("click", e => {
-      e.preventDefault();
-      const file = link.getAttribute("data-file");
-      const filename = file.split("/").pop();
-      loadNote(filename);
-      toggleSidebar(false);
-    });
-  });
-};
+}; 
