@@ -62,7 +62,8 @@ function toggleSidebar(force = null) {
 }
 
 window.onload = () => {
-  // Гамбургер-меню
+  loadNote("Chemistry.md"); // или другой нужный файл
+
   document.querySelector(".menu-toggle").addEventListener("click", () => {
     toggleSidebar();
   });
@@ -71,12 +72,13 @@ window.onload = () => {
     toggleSidebar(false);
   });
 
-  // Обработка ссылок .load-md
-  document.querySelectorAll('.load-md').forEach(link => {
-    link.addEventListener('click', (e) => {
+  // Навешиваем обработчики на все ссылки с классом load-md
+  document.querySelectorAll(".load-md").forEach(link => {
+    link.addEventListener("click", e => {
       e.preventDefault();
-      const fileUrl = link.getAttribute('data-file');
-      loadNote(fileUrl);
+      const file = link.getAttribute("data-file");
+      const filename = file.split("/").pop();
+      loadNote(filename);
       toggleSidebar(false);
     });
   });
