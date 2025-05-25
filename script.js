@@ -1,4 +1,3 @@
-
 /* ===== НАСТРОЙКА ===== */
 const NOTES_DIR   = 'notes/';          // папка с *.md и index.json
 const JSON_INDEX  = 'index.json';      // список файлов
