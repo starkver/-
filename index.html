@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -21,15 +22,15 @@
 
   <!-- ===== Боковое меню ===== -->
   <nav class="mobile-sidebar" id="mobile-sidebar">
-    <ul>
+    <!-- статические пункты -->
+    <ul class="static-links">
       <li><a href="#" class="menu-home">Заглавная</a></li>
-      <li>
-        <a href="#Chemistry.md" class="load-md" data-file="Chemistry.md">химия экзамен</a>
-      </li>
-      <li><a href="#" class="disabled-link">in development</a></li>
-      <li><a href="#" class="disabled-link">in development</a></li>
-      <li><a href="#" class="disabled-link">in development</a></li>
     </ul>
+
+    <hr>
+    <!-- динамический список Markdown-файлов -->
+    <ul id="file-list"></ul>
+
     <hr>
     <p class="donate-section"><strong>in development</strong>
 in development</p>
