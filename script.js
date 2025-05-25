@@ -1,89 +1,106 @@
-let currentFiles = [];
+/* ====== настройка ====== */
+const NOTES_DIR  = 'notes/';            // где лежат *.md
+const CONTENT_ID = 'note-content';      // id контейнера для разметки
 
-async function loadFileList() {
-  const res = await fetch("notes/" + encodeURIComponent(filename));
-  const files = await res.json();
-  currentFiles = files;
+/* ================= РОУТЕР ================= */
+// открываем заметку, когда меняется #hash
+window.addEventListener('hashchange', handleHash);
+// и при первой загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+  bindMenuControls();       // клики по гамбургер‑кнопке и оверлею
+  bindMenuLinks();          // клики по <a class="load-md">
+  handleHash();             // что открыть прямо сейчас
+});
 
-  const list = document.getElementById("file-list");
-  list.innerHTML = "";
+function handleHash() {
+  const hash = decodeURIComponent(location.hash.slice(1));
+  if (!hash) return; // "Заглавная" страница
 
-  files.forEach(file => {
-    const li = document.createElement("li");
-    li.textContent = file.replace(".md", "");
-    li.onclick = () => {
-      loadNote(file);
-      toggleSidebar(false);
-    };
-    list.appendChild(li);
-  });
+  const [file, anchor] = hash.split(':');
+  if (!file.endsWith('.md')) return;
 
-  if (window.MathJax) MathJax.typesetPromise();
+  loadNote(file, anchor);
 }
 
+/* ================= ЗАГРУЗКА MD ================= */
+async function loadNote(filename, anchor = '') {
+  try {
+    const mdText  = await (await fetch(NOTES_DIR + filename)).text();
+    const htmlRaw = marked.parse(mdText);
+    const html    = generateAnchorsAndLinks(htmlRaw, filename);
+
+    const box = document.getElementById(CONTENT_ID);
+    box.innerHTML = html;
+
+    // формулы
+    if (window.MathJax) MathJax.typesetPromise();
+
+    // прокрутка к подзаголовку, если задан
+    if (anchor) {
+      const target = document.getElementById(anchor);
+      target?.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // синхронизируем адресную строку, если функция вызвана напрямую
+    const expectedHash = filename + (anchor ? ':' + anchor : '');
+    if (location.hash.slice(1) !== expectedHash) {
+      history.pushState(null, '', '#' + encodeURIComponent(expectedHash));
+    }
+  } catch (err) {
+    console.error('Не удалось загрузить', filename, err);
+  }
+}
+
+/* ===== вспомогательные функции ===== */
 function toAnchor(text) {
-  return text.toLowerCase().replace(/[^a-zа-я0-9]+/gi, "-").replace(/^-+|-+$/g, "");
+  return text.toLowerCase()
+             .replace(/[^a-zа-я0-9]+/gi, '-')
+             .replace(/^-+|-+$/g, '');
 }
 
 function generateAnchorsAndLinks(html, currentFile) {
-  html = html.replace(/<h(\d)>(.*?)<\/h\d>/g, (match, tag, text) => {
-    const anchor = toAnchor(text);
-    return <h${tag} id="${anchor}">${text}</h${tag}>;
-  });
+  // 1) даём id всем заголовкам
+  html = html.replace(/<h(\d)>(.*?)<\/h\1>/g, (m, lvl, txt) =>
+    <h${lvl} id="${toAnchor(txt)}">${txt}</h${lvl}>
+  );
 
-  html = html.replace(/\[\[#([^\]]+)\]\]/g, (match, linkText) => {
-    const anchorPart = toAnchor(linkText);
-    return <a href="#${anchorPart}" onclick="loadNote('${currentFile}', '${anchorPart}')">[[#${linkText}]]</a>;
-  });
+  // 2) превращаем [[#подзаголовок]] в ссылку
+  html = html.replace(/\[\[#([^\]]+?)]]/g, (m, raw) => {
+    const anchor = toAnchor(raw);
+    const hash   = encodeURIComponent(currentFile + ':' + anchor);
+    return <a href="#${hash}">[[#${raw}]]</a>;
+  });
 
-  return html;
+  return html;
 }
 
-async function loadNote(filename, anchor = "") {
-  const res = await fetch("notes/" + filename);
-  const text = await res.text();
-  const html = marked.parse(text);
-  const processed = generateAnchorsAndLinks(html, filename);
+/* ================= МЕНЮ И ОВЕРЛЕЙ ================= */
+function bindMenuControls() {
+  const toggleBtn = document.querySelector('.menu-toggle');
+  const overlay   = document.getElementById('overlay');
 
-  const container = document.getElementById("note-content");
-  container.innerHTML = processed;
+  toggleBtn.addEventListener('click', () => toggleSidebar());
+  overlay  .addEventListener('click', () => toggleSidebar(false));
+}
 
-  if (window.MathJax) MathJax.typesetPromise();
-
-  if (anchor) {
-    setTimeout(() => {
-      const target = document.getElementById(anchor);
-      if (target) {
-        target.scrollIntoView({ behavior: "smooth" });
-      }
-    }, 100);
-  }
+function bindMenuLinks() {
+  // все ссылки, у которых есть data-file
+  document.querySelectorAll('.load-md').forEach(a => {
+    a.addEventListener('click', evt => {
+      evt.preventDefault();
+      const file = a.dataset.file?.split('/').pop(); // берём имя.md
+      if (!file) return;
+      loadNote(file);
+      toggleSidebar(false);
+    });
+  });
 }
 
 function toggleSidebar(force = null) {
-  const sidebar = document.querySelector(".mobile-sidebar");
-  const overlay = document.querySelector(".overlay");
-  const isOpen = sidebar.classList.contains("open");
+  const sidebar = document.getElementById('mobile-sidebar');
+  const overlay = document.getElementById('overlay');
+  const isOpen  = sidebar.classList.contains('open');
 
-  const shouldOpen = force === null ? !isOpen : force;
-
-  if (shouldOpen) {
-    sidebar.classList.add("open");
-    overlay.classList.add("active");
-  } else {
-    sidebar.classList.remove("open");
-    overlay.classList.remove("active");
-  }
-}
-
-window.onload = () => {
-  loadFileList();
-
-  document.querySelector(".menu-toggle").addEventListener("click", () => {
-    toggleSidebar();
-  });
-
-  document.querySelector(".overlay").addEventListener("click", () => {
-    toggleSidebar(false);
-  });
-}; 
+  const shouldOpen = force === null ? !isOpen : force;
+  sidebar.classList.toggle('open',   shouldOpen);
+  overlay.classList.toggle('active', shouldOpen);
