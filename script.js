@@ -1,100 +1,214 @@
-/* ====== настройка ====== */
-const NOTES_DIR  = 'notes/';            // папка с *.md
-const CONTENT_ID = 'note-content';      // куда рендерим разметку
-
-/* ================== РОУТЕР ================== */
-window.addEventListener('hashchange', handleHash);
-document.addEventListener('DOMContentLoaded', () => {
-  bindSidebar();          // кнопка‑гамбургер и оверлей
-  bindMenuLinks();        // ссылки на заметки в сайдбаре
-  handleHash();           // «глубокая» ссылка, если есть
-});
-
-function handleHash() {
-  const raw = decodeURIComponent(location.hash.slice(1));
-  if (!raw) return; // открыта «Заглавная»
-  const [file, anchor] = raw.split(':');
-  if (file && file.endsWith('.md')) loadNote(file, anchor);
+некоторые изменения в стилях 
+/* Основное оформление */
+body {
+  background-color: #1e1e1e;
+  color: #dcdcdc;
+  font-family: 'Segoe UI', sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  font-size: 17px;
+  height: 100vh;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-/* ================= ЗАГРУЗКА MD ================= */
-async function loadNote(file, anchor = '') {
-  try {
-    const res = await fetch(`${NOTES_DIR}${file}`);
-    if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+/* Шапка */
+.app-header {
+  background-color: #2d2d2d;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  height: 50px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  z-index: 1001;
+}
 
-    const md      = await res.text();
-    const parsed  = marked.parse(md);
-    const html    = injectAnchors(parsed, file);
+.menu-toggle {
+  font-size: 24px;
+  background: none;
+  color: #72b5f3;
+  border: none;
+  cursor: pointer;
+  margin-right: 15px;
+}
 
-    const box = document.getElementById(CONTENT_ID);
-    box.innerHTML = html;
+.app-title {
+  font-size: 18px;
+  font-weight: bold;
+}
 
-    if (window.MathJax) await MathJax.typesetPromise();
+/* Выдвижное меню */
+.mobile-sidebar {
+  position: fixed;
+  top: 0;
+  left: -260px;
+  width: 260px;
+  height: 100%;
+  background: #2d2d2d;
+  padding: 20px 25px 20px 25px;
+  overflow-y: auto;
+  transition: left 0.3s ease;
+  z-index: 1000;
+  box-sizing: border-box;
+}
 
-    if (anchor) {
-      document.getElementById(anchor)?.scrollIntoView({ behavior: 'smooth' });
-    }
+/* затемнение экрана при открытом меню */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  opacity:0;
+  pointer-events:none;
+  transition: opacity .3s ease;
+  z-index:900;
+}
+.overlay.active { opacity:1; pointer-events:auto; }
 
-    const expected = file + (anchor ? ':' + anchor : '');
-    if (location.hash.slice(1) !== expected) {
-      history.replaceState(null, '', `#${encodeURIComponent(expected)}`);
-    }
-  } catch (err) {
-    console.error('Ошибка загрузки Markdown:', err);
+.mobile-sidebar.open {
+  left: 0;
+}
+
+.mobile-sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.mobile-sidebar li {
+  margin-bottom: 12px;
+}
+
+.mobile-sidebar a {
+  color: #72b5f3;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.mobile-sidebar a:hover {
+  text-decoration: underline;
+}
+
+.donate-section {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #ccc;
+}
+
+/* Затенение при открытом меню */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 900;
+}
+
+.overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Контент */
+.content-area {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  margin-top: 50px;
+}
+
+/* Заголовки */
+h1, h2, h3 {
+  margin-top: 1.5em;
+  font-weight: bold;
+}
+h1 { color: #ff7ca8; font-size: 1.8em; }
+h2 { color: #9dff70; font-size: 1.5em; }
+h3 { color: #ffd666; font-size: 1.2em; }
+
+/* Ссылки */
+a {
+  color: #72b5f3;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+/* Списки */
+ul, ol {
+  padding-left: 20px;
+}
+
+/* Код */
+code {
+  background-color: #2d2d2d;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: monospace;
+}
+pre {
+  background-color: #2d2d2d;
+  padding: 10px;
+  border-radius: 5px;
+  overflow-x: auto;
+}
+
+/* Цитаты */
+blockquote {
+  border-left: 4px solid #888;
+  padding-left: 10px;
+  color: #aaa;
+  margin-left: 0;
+}
+
+/* Таблицы */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  overflow-x: auto;
+}
+td, th {
+  border: 1px solid #444;
+  padding: 8px;
+  text-align: left;
+}
+th {
+  background-color: #333;
+}
+
+/* Markdown файл-лист */
+#file-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+#file-list li {
+  cursor: pointer;
+  color: #72b5f3;
+  padding: 5px 0;
+}
+#file-list li:hover {
+  text-decoration: underline;
+}
+
+/* Адаптивность */
+max-width: 600px {
+  .content-area {
+    padding: 15px;
+    font-size: 16px;
   }
-}
 
-/* ============ ВСПОМОГАТЕЛЬНЫЕ ============ */
-function slug(text) {
-  return text.toLowerCase()
-             .trim()
-             .replace(/[^a-zа-я0-9]+/gi, '-')
-             .replace(/^-+|-+$/g, '');
-}
+  h1 { font-size: 1.5em; }
+  h2 { font-size: 1.3em; }
+  h3 { font-size: 1.1em; }
 
-function injectAnchors(html, currentFile) {
-  // 1) добавляем id ко всем <h1>…<h6>
-  html = html.replace(/<h(\d)>([\s\S]*?)<\/h\1>/g, (_, level, txt) => {
-    const id = slug(txt);
-    return `<h${level} id="${id}">${txt}</h${level}>`;
-  });
-
-  // 2) превращаем [[#Подзаголовок]] → ссылку с хэшем
-  html = html.replace(/\[\[#([^\]]+?)\]\]/g, (_, raw) => {
-    const id = slug(raw);
-    const hash = encodeURIComponent(`${currentFile}:${id}`);
-    return `<a href="#${hash}">[[#${raw}]]</a>`;
-  });
-
-  return html;
-}
-
-/* ============== САЙДБАР ============== */
-function bindSidebar() {
-  const toggle  = document.querySelector('.menu-toggle');
-  const overlay = document.getElementById('overlay');
-  toggle.addEventListener('click', () => toggleSidebar());
-  overlay.addEventListener('click', () => toggleSidebar(false));
-}
-
-function bindMenuLinks() {
-  document.querySelectorAll('.load-md').forEach(link => {
-    link.addEventListener('click', e => {
-      e.preventDefault();
-      const file = link.dataset.file?.split('/').pop();
-      if (!file) return;
-      loadNote(file);
-      toggleSidebar(false);
-    });
-  });
-}
-
-function toggleSidebar(force = null) {
-  const sidebar = document.getElementById('mobile-sidebar');
-  const overlay = document.getElementById('overlay');
-  const isOpen  = sidebar.classList.contains('open');
-  const open    = force === null ? !isOpen : force;
-  sidebar.classList.toggle('open',   open);
-  overlay.classList.toggle('active', open);
+  table, pre {
+    font-size: 14px;
+  }
 }
