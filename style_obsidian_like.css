@@ -1,3 +1,4 @@
+некоторые изменения в стилях 
 /* Основное оформление */
 body {
   background-color: #1e1e1e;
@@ -45,13 +46,25 @@ body {
   left: -260px;
   width: 260px;
   height: 100%;
-  background-color: #2d2d2d;
-  color: #fff;
-  padding: 20px;
+  background: #2d2d2d;
+  padding: 20px 25px 20px 25px;
+  overflow-y: auto;
   transition: left 0.3s ease;
   z-index: 1000;
-  overflow-y: auto;
+  box-sizing: border-box;
 }
+
+/* затемнение экрана при открытом меню */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  opacity:0;
+  pointer-events:none;
+  transition: opacity .3s ease;
+  z-index:900;
+}
+.overlay.active { opacity:1; pointer-events:auto; }
 
 .mobile-sidebar.open {
   left: 0;
@@ -185,7 +198,7 @@ th {
 }
 
 /* Адаптивность */
-@media (max-width: 600px) {
+max-width: 600px {
   .content-area {
     padding: 15px;
     font-size: 16px;
