@@ -14,47 +14,39 @@
     src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
-
+  <!-- ===== Верхняя панель ===== -->
   <header class="app-header">
     <button class="menu-toggle">&#9776;</button>
     <span class="app-title">Помощник</span>
   </header>
 
+  <!-- ===== Боковое меню ===== -->
   <nav class="mobile-sidebar" id="mobile-sidebar">
     <ul>
-      <li><a href="#">Заглавная</a></li>
-      <li><a href="https://starkver.github.io/-/notes/Chemistry.md">химия экзамен</a></li>
-      <li><a href="#">in development</a></li>
-      <li><a href="#">in development</a></li>
-      <li><a href="#">in development</a></li>
+      <li><a href="#" class="menu-home">Заглавная</a></li>
+      <li>
+        <a href="#Chemistry.md" class="load-md" data-file="Chemistry.md">
+          химия экзамен
+        </a>
+      </li>
+      <li><a href="#" class="disabled-link">in development</a></li>
+      <li><a href="#" class="disabled-link">in development</a></li>
+      <li><a href="#" class="disabled-link">in development</a></li>
     </ul>
     <hr>
     <p class="donate-section">
-      <strong>in development</strong><br>
-      in development
+      <strong>in development</strong><br>
+      in development
     </p>
   </nav>
 
+  <!-- затемняющая подложка при открытом меню -->
   <div class="overlay" id="overlay"></div>
 
+  <!-- сюда рендерится содержимое Markdown -->
   <div class="content-area" id="note-content"></div>
 
+  <!-- главный скрипт -->
   <script src="script.js"></script>
-  <script>
-    const toggleBtn = document.querySelector(".menu-toggle");
-    const sidebar = document.getElementById("mobile-sidebar");
-    const overlay = document.getElementById("overlay");
-
-    toggleBtn.addEventListener("click", () => {
-      sidebar.classList.toggle("open");
-      overlay.classList.toggle("active");
-    });
-
-    overlay.addEventListener("click", () => {
-      sidebar.classList.remove("open");
-      overlay.classList.remove("active");
-    });
-  </script>
-
 </body>
 </html>
