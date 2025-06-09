@@ -1,9 +1,0 @@
-pages:
-  stage: deploy
-  script:
-    - echo "Deploying to Pages from develop branch"
-  artifacts:
-    paths:
-      - public
-  only:
-    - develop  
