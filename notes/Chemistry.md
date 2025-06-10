@@ -1,18 +1,4 @@
-```dataviewjs
-const targetDate = "2025-06-18 01:00"; 
-const now = new Date();
-const target = new Date(targetDate);
-const diff = target - now; 
-if (diff > 0) {
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    dv.el("p", `⏳ **Осталось времени:** ${days} дней, ${hours} часов`);
-} 
-else {
-    dv.el("p", " **Удачи на экзамене по химии!**");
-}
 
-```
 # ВОПРОСЫ К ЭКЗАМЕНУ.
 ### обратно растворы 
 
