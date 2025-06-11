@@ -197,7 +197,8 @@ th {
 }
 
 /* Адаптивность */
-max-width: 900px {
+/* Адаптивность для экранов ≤ 900px */
+@media (max-width: 900px) {
   .content-area {
     padding: 15px;
     font-size: 16px;
@@ -209,5 +210,32 @@ max-width: 900px {
 
   table, pre {
     font-size: 14px;
+  }
+}
+
+/* Адаптивность для экранов ≤ 600px (телефоны) */
+@media (max-width: 600px) {
+  body {
+    font-size: 15px; /* Уменьшаем базовый размер шрифта */
+  }
+
+  .app-header {
+    padding: 10px;
+  }
+
+  .content-area {
+    padding: 10px;
+  }
+
+  /* Улучшаем читаемость таблиц */
+  table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  /* Уменьшаем ширину выдвижного меню */
+  .mobile-sidebar {
+    width: 80%;
+    left: -80%;
   }
 }
