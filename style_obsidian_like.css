@@ -116,7 +116,7 @@ body {
 /* Контент */
 .content-area {
   flex: 1;
-  padding: 20px;
+  padding: 100px;
   overflow-y: auto;
   margin-top: 50px;
 }
@@ -137,6 +137,13 @@ a {
 }
 a:hover {
   text-decoration: underline;
+}
+/*Картинки*/
+img {
+  max-width: 100%;       /* Не выходит за пределы контейнера */
+  height: auto;          /* Сохраняет пропорции */
+  border-radius: 4px;    /* Скругление углов (опционально) */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Легкая тень (опционально) */
 }
 
 /* Списки */
